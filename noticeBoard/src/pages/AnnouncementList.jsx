@@ -3,26 +3,24 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { listAnnouncements, deleteAnnouncement } from "../api/announcementApi";
 
 export default function AnnouncementList() {
   const navigate = useNavigate();
   const [announcements, setAnnouncements] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8085/api/search")
-      .then((response) => {
-        setAnnouncements(response.data); // 假設 response.data 是陣列
-      })
-      .catch((error) => {
-        console.error("取得公告清單失敗：", error);
-      });
+    listAnnouncements()
+      .then((res) => setAnnouncements(res.data))
+      .catch((err) => console.error("取得失敗", err));
   }, []);
 
   const handleDelete = (id) => {
-    if (window.confirm("確定要刪除這則公告嗎？")) {
-      setAnnouncements(prev => prev.filter(item => item.id !== id));
-      // TODO: axios.delete(`/api/announcement/${id}`) // 實作刪除
-    }
+    deleteAnnouncement(id)
+      .then(() => {
+        setAnnouncements(prev => prev.filter(item => item.id !== id));
+      })
+      .catch((err) => console.error("刪除失敗", err));
   };
 
   return (

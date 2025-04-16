@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
-import { Editor } from "@tinymce/tinymce-react";
 import { useSearchParams } from "react-router-dom";
+import { addAnnouncement, updateAnnouncement, getAnnouncement } from "../api/announcementApi";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
 
 function AddEdit() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     subject: "",
@@ -15,21 +18,18 @@ function AddEdit() {
 
   useEffect(() => {
     if (id) {
-      // TODO: 呼叫 API 取得資料
-      // 暫時模擬資料
-      setForm({
-        subject: "網站維護公告",
-        publishDate: "2025-04-10",
-        endDate: "2025-04-20",
-        content: "<p>網站將於 4/20 維護</p>"
-      });
+      getAnnouncement(id)
+        .then((res) => setForm(res.data))
+        .catch((err) => console.error("取得公告失敗", err));
     }
   }, [id]);
+
 
   const handleChange = (e) => {
     const { id, value } = e.target;
     setForm((prev) => ({ ...prev, [id]: value }));
   };
+
 
   const handleEditorChange = (content) => {
     setForm((prev) => ({ ...prev, content }));
@@ -37,13 +37,32 @@ function AddEdit() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (id) {
-      console.log("更新公告：", form);
+      // 編輯
+      updateAnnouncement(id, form)
+        .then(() => {
+          alert("更新成功！");
+          navigate("/"); // 導回列表頁
+        })
+        .catch((err) => {
+          console.error("更新失敗", err);
+          alert("更新失敗，請稍後再試！");
+        });
     } else {
-      console.log("新增公告：", form);
+      // 新增
+      addAnnouncement(form)
+        .then(() => {
+          alert("新增成功！");
+          navigate("/"); // 導回列表頁
+        })
+        .catch((err) => {
+          console.error("新增失敗", err);
+          alert("新增失敗，請稍後再試！");
+        });
     }
-    // TODO: 串接後端 API
-  };
+
+  }
 
   return (
     <div className="container my-5">
@@ -68,17 +87,14 @@ function AddEdit() {
           </div>
         </div>
         <div className="mb-3 row">
-          <label className="col-sm-2 col-form-label">公告內容:</label>
+          <label htmlFor="content" className="col-sm-2 col-form-label">公告內容:</label>
           <div className="col-sm-10">
-            <Editor
+            <textarea
+              id="content"
+              className="form-control"
+              rows="6"
               value={form.content}
-              onEditorChange={handleEditorChange}
-              init={{
-                height: 300,
-                menubar: false,
-                plugins: "lists link table paste",
-                toolbar: "undo redo | bold italic | bullist numlist | link table"
-              }}
+              onChange={handleChange}
             />
           </div>
         </div>

@@ -1,11 +1,18 @@
-// 使用 axios 來串接後端 API
 import axios from 'axios';
 
-export const getAnnouncement = (id) =>
-  axios.get(`/api/announcements/${id}`);
+const BASE_URL = 'http://localhost:8085/api';
 
-export const createAnnouncement = (data) =>
-  axios.post('/api/announcements', data);
+export const getAnnouncement = (id) =>
+  axios.get(`${BASE_URL}/announcements/${id}`);
+
+export const addAnnouncement = (data) =>
+  axios.post(`${BASE_URL}/announcements`, data);
 
 export const updateAnnouncement = (id, data) =>
-  axios.put(`/api/announcements/${id}`, data);
+  axios.put(`${BASE_URL}/announcements/${id}`, data);
+
+export const deleteAnnouncement = (id) =>
+  axios.delete(`${BASE_URL}/delete/${id}`);
+
+export const listAnnouncements = () =>
+  axios.get(`${BASE_URL}/search`);

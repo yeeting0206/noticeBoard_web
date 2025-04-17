@@ -30,13 +30,20 @@ function AddEdit() {
     setForm((prev) => ({ ...prev, [id]: value }));
   };
 
-
-  const handleEditorChange = (content) => {
-    setForm((prev) => ({ ...prev, content }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // 基本欄位驗證
+  if (!form.subject || !form.publishDate || !form.endDate || !form.content) {
+    alert("尚有欄位未填寫");
+    return;
+  }
+
+  // 發佈日期需早於或等於截止日期
+  if (form.publishDate > form.endDate) {
+    alert("發佈日期不能晚於截止日期");
+    return;
+  }
 
     if (id) {
       // 編輯

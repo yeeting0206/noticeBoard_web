@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { addAnnouncement, updateAnnouncement, getAnnouncement } from "../api/announcementApi";
+import {
+  addAnnouncement,
+  updateAnnouncement,
+  getAnnouncement,
+} from "../api/announcementApi";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +28,6 @@ function AddEdit() {
     }
   }, [id]);
 
-
   const handleChange = (e) => {
     const { id, value } = e.target;
     setForm((prev) => ({ ...prev, [id]: value }));
@@ -33,17 +36,16 @@ function AddEdit() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // 基本欄位驗證
-  if (!form.subject || !form.publishDate || !form.endDate || !form.content) {
-    alert("尚有欄位未填寫");
-    return;
-  }
+    if (!form.subject || !form.publishDate || !form.endDate || !form.content) {
+      alert("尚有欄位未填寫");
+      return;
+    }
 
-  // 發佈日期需早於或等於截止日期
-  if (form.publishDate > form.endDate) {
-    alert("發佈日期不能晚於截止日期");
-    return;
-  }
+    // 發佈日期需早於或等於截止日期
+    if (form.publishDate > form.endDate) {
+      alert("發佈日期不能晚於截止日期");
+      return;
+    }
 
     if (id) {
       // 編輯
@@ -68,33 +70,64 @@ function AddEdit() {
           alert("新增失敗，請稍後再試！");
         });
     }
-
-  }
+  };
 
   return (
     <div className="container my-5">
       <h3 className="mb-4">{id ? "編輯公告" : "新增公告"}</h3>
       <form onSubmit={handleSubmit}>
         <div className="mb-3 row">
-          <label htmlFor="subject" className="col-sm-2 col-form-label">標題:</label>
+          <label htmlFor="subject" className="col-sm-2 col-form-label">
+            標題:
+          </label>
           <div className="col-sm-6">
-            <input type="text" id="subject" className="form-control" value={form.subject} onChange={handleChange} />
+            <input
+              type="text"
+              id="subject"
+              className="form-control"
+              value={form.subject}
+              onChange={handleChange}
+            />
           </div>
         </div>
         <div className="mb-3 row">
-          <label htmlFor="publishDate" className="col-sm-2 col-form-label">發佈日期:</label>
+          <label htmlFor="publishDate" className="col-sm-2 col-form-label">
+            發佈日期:
+          </label>
           <div className="col-sm-4">
-            <input type="date" id="publishDate" className="form-control" value={form.publishDate} onChange={handleChange} />
+            <input
+              type="date"
+              id="publishDate"
+              className="form-control"
+              value={form.publishDate}
+              onChange={handleChange}
+            />
           </div>
         </div>
         <div className="mb-3 row">
-          <label htmlFor="endDate" className="col-sm-2 col-form-label">截止日期:</label>
+          <label htmlFor="endDate" className="col-sm-2 col-form-label">
+            截止日期:
+          </label>
           <div className="col-sm-4">
-            <input type="date" id="endDate" className="form-control" value={form.endDate} onChange={handleChange} />
+            <input
+              type="date"
+              id="endDate"
+              className="form-control"
+              value={form.endDate}
+              onChange={handleChange}
+            />
           </div>
         </div>
         <div className="mb-3 row">
-          <label htmlFor="content" className="col-sm-2 col-form-label">公告內容:</label>
+          <label className="col-sm-2 col-form-label">公布者:</label>
+          <div className="col-sm-4 pt-2">
+            <span>Administrator</span>
+          </div>
+        </div>
+        <div className="mb-3 row">
+          <label htmlFor="content" className="col-sm-2 col-form-label">
+            公告內容:
+          </label>
           <div className="col-sm-10">
             <textarea
               id="content"
@@ -107,7 +140,9 @@ function AddEdit() {
         </div>
         <div className="row">
           <div className="offset-sm-2 col-sm-10">
-            <button type="submit" className="btn btn-primary">送出</button>
+            <button type="submit" className="btn btn-primary">
+              送出
+            </button>
           </div>
         </div>
       </form>

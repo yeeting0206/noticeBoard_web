@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8085/api';
+const BASE_URL = 'http://192.168.1.100:8080/api';
 
 export const getAnnouncement = (id) =>
   axios.get(`${BASE_URL}/announcements/${id}`);

@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// 虛擬機IP開放8080port
 const BASE_URL = 'http://192.168.1.100:8080/api';
 
 export const getAnnouncement = (id) =>
